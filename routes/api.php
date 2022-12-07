@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BreedController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Verb          Path                        Action  Route Name
+//GET           /breeds                      index   breeds.index
+//POST          /breeds                      store   breeds.store
+//GET           /breeds/{breed}               show    breeds.show
+//PUT|PATCH     /breeds/{breed}               update  breeds.update
+//DELETE        /breeds/{breed}               destroy breeds.destroy
+Route::apiResource('breeds', BreedController::class);
+
+

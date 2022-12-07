@@ -24,7 +24,7 @@ class UpdateBreedRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'=>'required|alpha|max:50'
         ];
     }
 }
