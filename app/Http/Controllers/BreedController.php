@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBreedRequest;
 use App\Http\Requests\UpdateBreedRequest;
+use App\Http\Resources\BreedResource;
 use App\Models\Breed;
-use App\Models\GuestCheckin;
+use App\Http\Resources\BreedCollection;
 use Illuminate\Http\Request;
 
 class BreedController extends Controller
@@ -17,10 +18,7 @@ class BreedController extends Controller
      */
     public function index()
     {
-        $breeds = Breed::all();
-        return response()->json([
-            'breeds' => $breeds
-        ]);
+        return new BreedCollection(Breed::paginate());
     }
 
     /**
@@ -43,10 +41,8 @@ class BreedController extends Controller
      */
     public function show($id)
     {
-        $breed=Breed::findOrFail($id);
-        return response()->json([
-            'breed' => $breed
-        ]);    }
+        return new BreedResource(Breed::findOrFail($id));
+    }
 
     /**
      * Update the specified resource in storage.
@@ -58,9 +54,10 @@ class BreedController extends Controller
     public function update(UpdateBreedRequest $request, $id)
     {
         $validated = $request->validated();
-        $breed= Breed::findOrFail($id);
-        $breed->name=$validated['name'];
+        $breed = Breed::findOrFail($id);
+        $breed->name = $validated['name'];
         $breed->save();
+        return new BreedResource($breed->fresh());
 
     }
 
@@ -73,5 +70,8 @@ class BreedController extends Controller
     public function destroy($id)
     {
         Breed::destroy($id);
+        return response()->json([
+            'data' => "Successfully deleted ${id}",
+        ], 200);
     }
 }
